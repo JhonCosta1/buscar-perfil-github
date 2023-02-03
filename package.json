@@ -1,0 +1,9 @@
+{
+  "name": "buscar-perfil",
+  "version": "1.0.0",
+  "description": "buscador de perfil",
+  "main": "index.js",
+  "repository": "https://github.com/JhonCosta1/buscar-perfil-github.git",
+  "author": "Jhon Costa <jhon.costa.dev@gmail.com>",
+  "license": "MIT"
+}
