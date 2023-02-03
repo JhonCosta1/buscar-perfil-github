@@ -5,7 +5,7 @@ module.exports = {
         filename: 'bundle.js',
     },
     devServer: {
-        contentBase: __dirname + '/public'
+        static: './public',
     },
     module: {
         rules: [
