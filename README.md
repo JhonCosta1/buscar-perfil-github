@@ -19,5 +19,5 @@
 </ul>
 
 <p>Segue deploy do projeto</p>
-<a class="nav-link" href="https://lista-de-tarefa-kjeb-a6mtblrh2-jhoncosta1.vercel.app/">Clique para DEPLOY</a>
+<a class="nav-link" href="https://buscar-perfil-github-2f14.vercel.app/">Clique para DEPLOY</a>
 
