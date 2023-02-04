@@ -1,3 +1,5 @@
+import api from './api';
+
 class App{
     //Construtor
     constructor(){
@@ -18,17 +20,31 @@ class App{
         this.formulario.onsubmit = evento => this.adicionarRepositorio(evento);
     }
 
-    adicionarRepositorio(evento){
+    async adicionarRepositorio(evento){
         //Evitar que o formulário recarregue a página
         evento.preventDefault();
 
+        //Recuperar valor do input
+        let input = this.formulario.querySelector('input[id=repositorio]').value;
+
+
+        //Se o input vier vazio, sai da api
+        if(input.length === 0){
+            return; //return sempre sai da mesma função
+        }
+
+        let response = await api.get(`/repos/${input}`);
+
+        let {name, description, html_url, owner: {avatar_url}} = response.data;
+
+
         //Adicionar o repositorio a lista
         this.repositorios.push({
-            nome: 'Nerd',
-            descricao: 'Iconic font',
-            avatar_url: 'https:',
-            link: 'https://',
-        })
+            nome: name,
+            descricao: description,
+            avatar_url,
+            link: html_url,
+        });
 
         //Renderizar a tela
         this.renderizarTela();
