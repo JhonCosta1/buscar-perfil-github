@@ -75,7 +75,7 @@ class App{
             //<p>
             let p = document.createElement('p');
             let txtDescricao = document.createTextNode(repositorio.descricao);
-            p.appendChild(txtDrescricao);
+            p.appendChild(txtDescricao);
             li.appendChild(p);
 
             //<a>
