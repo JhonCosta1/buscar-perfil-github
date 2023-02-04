@@ -1,63 +1,94 @@
 import api from './api';
 
 class App{
+
     //Construtor
     constructor(){
-        //Lista de repositórios
+        // Lista de repositórios
         this.repositorios = [];
 
-        //Form
+        // Form
         this.formulario = document.querySelector('form');
 
-        //Lista
+        // Lista
         this.lista = document.querySelector('.list-group');
 
-        //Método para registrar os eventos do form
-        this.registrarEventos();
+        // Método para registar os eventos do form
+        this.registarEventos();
     }
 
-    registrarEventos(){
+    registarEventos(){
         this.formulario.onsubmit = evento => this.adicionarRepositorio(evento);
     }
 
     async adicionarRepositorio(evento){
-        //Evitar que o formulário recarregue a página
+        // Evita que o formulátio recarregue a página
         evento.preventDefault();
 
-        //Recuperar valor do input
+        // Recuperar o valor do input
         let input = this.formulario.querySelector('input[id=repositorio]').value;
 
-
-        //Se o input vier vazio, sai da api
+        // Se o input vier vazio...sai da appp
         if(input.length === 0){
-            return; //return sempre sai da mesma função
+            return; //return sempre sai da função
         }
 
-        let response = await api.get(`/repos/${input}`);
+        // Ativa o carregamento
+        this.apresentarBuscando();
 
-        let {name, description, html_url, owner: {avatar_url}} = response.data;
+        try{
+            let response = await api.get(`/repos/${input}`);
 
+            //console.log(response);
 
-        //Adicionar o repositorio a lista
-        this.repositorios.push({
-            nome: name,
-            descricao: description,
-            avatar_url,
-            link: html_url,
-        });
+            let { name, description, html_url, owner: { avatar_url } } = response.data;
 
-        //Renderizar a tela
-        this.renderizarTela();
+            // Adiciona o repositorio na lista
+            this.repositorios.push({
+                nome: name,
+                descricao: description,
+                avatar_url,
+                link: html_url,
+            });
+
+            // Renderizar a tela
+            this.renderizarTela();
+        }catch(erro){
+            // Limpa buscando
+            this.lista.removeChild(document.querySelector('.list-group-item-warning'));
+
+            // Limpar erro existente
+            let er = this.lista.querySelector('.list-group-item-danger');
+            if(er !== null){
+                this.lista.removeChild(er);
+            }
+
+            //<li>
+            let li = document.createElement('li');
+            li.setAttribute('class', 'list-group-item list-group-item-danger');
+            let txtErro = document.createTextNode(`O repositório ${input} não existe.`);
+            li.appendChild(txtErro);
+            this.lista.appendChild(li);
+        }
+    }
+
+    apresentarBuscando(){
+        //<li>
+        let li = document.createElement('li');
+        li.setAttribute('class', 'list-group-item list-group-item-warning');
+        let txtBuscando = document.createTextNode(`Aguarde, buscando o repositório...`);
+        li.appendChild(txtBuscando);
+        this.lista.appendChild(li);
     }
 
     renderizarTela(){
         //Limpar o conteúdo de lista
         this.lista.innerHTML = '';
 
-        //percorrer a lista de repositórios e criar elementos
+        // Percorrer toda a lista de repositórios e criar os elementos
         this.repositorios.forEach(repositorio => {
 
-            //li
+            //<li>
             let li = document.createElement('li');
             li.setAttribute('class', 'list-group-item list-group-item-action');
 
@@ -86,16 +117,14 @@ class App{
             a.appendChild(txtA);
             li.appendChild(a);
 
-
-            //adicionar <li></li> como filho da ul
+            // Adicionar <li> como filho da ul
             this.lista.appendChild(li);
 
-            //limpar o conteudo input
+            // Limpar o conteúdo do input
             this.formulario.querySelector('input[id=repositorio]').value = '';
 
-            //adicionar o foco no input
+            // Adiciona o foco no input
             this.formulario.querySelector('input[id=repositorio]').focus();
-
         });
     }
 }
